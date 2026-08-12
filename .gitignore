@@ -1,5 +1,4 @@
 venv/
-venv-downgrade/
 *.egg-info/
 *.pyc
 *.sw*
