@@ -1,2 +1,5 @@
 venv/
+runtime-env/
 .snakemake/
+plots/
+assets/

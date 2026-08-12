@@ -7,9 +7,9 @@ import pickle
 import numpy as np
 import torch
 from numba import config
-from UMAP_RGB.utils.window import WindowMesh
-from UMAP_RGB.networks.EfficientNet_model import EfficientEncoder
-from UMAP_RGB.utils.UMAP_RGB import UMAP
+from idraw.utils.window import WindowMesh
+from idraw.networks.EfficientNet_model import EfficientEncoder
+from idraw.utils.UMAP_RGB import UMAP
 
 
 def _to_numpy(path: os.PathLike, dtype=np.float32):
@@ -50,7 +50,7 @@ logger.info(f"Numba threads: {config.NUMBA_NUM_THREADS}")
 logger.info(f"PyTorch intra-op threads: {torch.get_num_threads()}")
 logger.info(f"PyTorch inter-op threads: {torch.get_num_interop_threads()}")
 
-img_stk = load('test2_*.bin', (2, 256, 256))
+img_stk = load(input_dir, 'test2_*.bin', (2, 256, 256))
 mapper_in = img_stk[:, -1, :, :]
 window_shape = (mapper_in.shape[0], window_length, window_length)
 step_shape = (mapper_in.shape[0],
@@ -73,7 +73,7 @@ to_pkl['step_shape'] = step_shape
 to_pkl['window_ttcf'] = windows.window_ttcf
 to_pkl['mapper_get_rgb_0'] = mapper.rgb[0]
 to_pkl['mapper_rgb'] = mapper.rgb
-to_pkl['low_res_rgb'] = mapper.low_res_rgb
+to_pkl['mapper_low_res_rgb'] = mapper.low_res_rgb
 
 with open(output_path, 'wb') as fh:
     pickle.dump(to_pkl, fh)

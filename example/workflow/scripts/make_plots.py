@@ -36,7 +36,7 @@ with open(input_path, 'rb') as fh:
     results = pickle.load(fh)
 
 # Plot a few frames of the input data; phase and amplitude
-num_frames = results['img_stk.shape'][0]
+num_frames = results['img_stk'].shape[0]
 frames_of_interest = np.linspace(0, num_frames, 3, endpoint=False, dtype=int)
 for frame in frames_of_interest:
     mappable_0 = plt.imshow(results['img_stk'][frame, 0, :, :], cmap=data_cmap)
@@ -63,7 +63,7 @@ ttcf_j_idx = 0
 ttcf = results['window_ttcf'][0, ttcf_i_idx, ttcf_j_idx, :, :]
 plt.imshow(ttcf, origin='lower', cmap=ttcf_cmap)
 plt.colorbar()
-plt.title('TFCF of the ({ttcf_i_idx}, {ttcf_j_idx})\'th window')
+plt.title(f'TFCF of the ({ttcf_i_idx}, {ttcf_j_idx})\'th window')
 plt.savefig(output_dir / f'ttcf_{ttcf_i_idx}_{ttcf_j_idx}.pdf')
 show()
 
