@@ -1,0 +1,28 @@
+SOURCE_VENV = "source workflow/envs/venv/bin/activate && "
+
+rule all:
+    input:
+        "plots/"
+
+rule make_plots:
+    input:
+        script="workflow/scripts/make_plots.py",
+        input_path="assets/results.pkl"
+    output:
+        directory("plots/")
+    shell:
+        SOURCE_VENV + "mkdir -p {output} && python {input.script} --input_path {input.input_path} --output-dir {output} --show"
+
+rule do_idraw:
+    input:
+        script="workflow/scripts/do_idraw.py",
+        data="data/"
+    output:
+        "assets/results.pkl"
+    shell:
+         SOURCE_VENV + "NUMBA_NUM_THREADS={threads} \
+         MKL_NUM_THREADS={threads} \
+         OMP_NUM_THREADS={threads} \
+         NUMBA_THREADING_LAYER=workqueue \
+         UMAP_CDW_DATA={input.data} \
+         python {input.script} --input-dir {input.data} --output-path {output}"
