@@ -1,6 +1,7 @@
 venv/
-venv-downgrade/
 *.egg-info/
+build/
 *.pyc
 *.sw*
 data/
+.DS_Store

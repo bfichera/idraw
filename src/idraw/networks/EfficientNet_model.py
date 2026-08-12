@@ -3,12 +3,15 @@ import torch
 from typing import TypeVar
 from torchvision.models import efficientnet_b2, EfficientNet_B2_Weights
 import torchvision.transforms.functional as F
+import logging
 
 from sklearn.preprocessing import StandardScaler
 
-from UMAP_RGB.utils.window import WindowMesh
+from ..utils.window import WindowMesh
 
 DType = TypeVar("DType", bound=np.generic)
+
+_logger = logging.getLogger(__file__)
 
 
 class EfficientEncoder:
@@ -72,8 +75,13 @@ class EfficientEncoder:
         """
 
         # Prepare pre-trained model
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        print(f"Using device: {device}")
+        if torch.cuda.is_available():
+            device = torch.device('cuda')
+        elif torch.mps.is_available():
+            device = torch.device('mps')
+        else:
+            device = torch.device('cpu')
+        _logger.info(f"Using device: {device}")
 
         self.model.to(device)
         self.model.eval()
@@ -100,8 +108,8 @@ class EfficientEncoder:
         all_feature_vectors = []
 
         with torch.no_grad():
-            print(f"Processing {len(net_input)} images"
-                  f" in batches of {batch_size}...")
+            _logger.info(f"Processing {len(net_input)} images"
+                         f" in batches of {batch_size}...")
 
             for i in range(0, len(net_input), batch_size):
                 # Define the end of the batch
@@ -116,7 +124,7 @@ class EfficientEncoder:
         feature_vectors_tensor = torch.cat(all_feature_vectors, dim=0)
         feature_vectors = feature_vectors_tensor.numpy()
 
-        print("Scaling features...")
+        _logger.info("Scaling features...")
         scaler = StandardScaler()
         scaled_feature_vecs = scaler.fit_transform(feature_vectors)
         del net_input

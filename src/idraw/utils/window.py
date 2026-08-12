@@ -3,7 +3,7 @@ from typing import Callable, Any, TypeVar
 import numpy as np
 from tqdm import tqdm
 
-from UMAP_RGB.utils.ttcf import autocorr
+from .ttcf import autocorr
 
 DType = TypeVar("DType", bound=np.generic)
 
