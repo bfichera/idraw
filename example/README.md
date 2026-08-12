@@ -1,5 +1,10 @@
 To run the examples:
 
+### Step 0: Fetch the data
+```
+$ make fetch-data
+```
+
 ### Step 1: Install the environment
 ```
 $ make env
